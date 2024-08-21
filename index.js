@@ -1,15 +1,14 @@
 'use strict';
 
-var React = require('react-native');
-var {
-    Component,
+import React from "react";
+import {
     StyleSheet,
     View,
     Text,
     TouchableOpacity,
-} = React;
+} from "react-native";
 
-class Tabs extends Component {
+class Tabs extends React.Component {
     onSelect(el){
         if (el.props.onSelect) {
             el.props.onSelect(el);
@@ -66,4 +65,4 @@ var styles = StyleSheet.create({
     }
 });
 
-module.exports = Tabs;
+export default Tabs;
