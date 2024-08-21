@@ -1,66 +1,29 @@
 'use strict';
 
-import React, {
-    Component
-} from 'react';
-
-import {
+var React = require('react-native');
+var {
+    Component,
     StyleSheet,
     View,
     Text,
     TouchableOpacity,
-    Keyboard,
-    Platform,
-} from 'react-native';
-
-type State = {
-    keyboardUp: boolean,
-}
+} = React;
 
 class Tabs extends Component {
-    state: State = {};
-
     onSelect(el){
         if (el.props.onSelect) {
             el.props.onSelect(el);
-        } else if (this.props.onSelect) {
+        }
+        if (this.props.onSelect) {
             this.props.onSelect(el);
         }
     }
 
-    componentWillMount(){
-        if (Platform.OS==='android') {
-            this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardWillShow);
-            this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardWillHide);
-        }
-    }
-
-    componentWillUnmount(){
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
-    }
-
-    keyboardWillShow = (e) => {
-        this.setState({ keyboardUp: true });
-    };
-
-    keyboardWillHide = (e) => {
-        this.setState({ keyboardUp: false });
-    };
-
     render(){
-        const self = this;
-        let selected = this.props.selected
-        if (!selected){
-            React.Children.forEach(this.props.children.filter(c=>c), el=>{
-                if (!selected || el.props.initial){
-                    selected = el.props.name || el.key;
-                }
-            });
-        }
+        var self = this;
         return (
-            <View style={[styles.tabbarView, this.props.style, this.state.keyboardUp && styles.hidden]}>
-                {React.Children.map(this.props.children.filter(c=>c),(el) => {
+            <View style={[styles.tabbarView, this.props.style]}>
+                {this.props.children.map((el)=> {
                     let CustomView = el.props.disabled ? View : TouchableOpacity;
                     return (
                         <CustomView key={el.props.name+"touch"}
@@ -77,6 +40,9 @@ class Tabs extends Component {
     }
 }
 var styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
     tabbarView: {
         position:'absolute',
         bottom:0,
@@ -95,9 +61,9 @@ var styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    hidden: {
-        height: 0,
-    },
+    contentView: {
+        flex: 1
+    }
 });
 
 module.exports = Tabs;
