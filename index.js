@@ -60,16 +60,18 @@ class Tabs extends Component {
         }
         return (
             <View style={[styles.tabbarView, this.props.style, this.state.keyboardUp && styles.hidden]}>
-                {React.Children.map(this.props.children.filter(c=>c),(el)=>
-                    <TouchableOpacity key={el.props.name+"touch"}
-                       testID={el.props.testID}
-                       style={[styles.iconView, this.props.iconStyle, (el.props.name || el.key) == selected ? this.props.selectedIconStyle || el.props.selectedIconStyle || {} : {} ]}
-                       onPress={()=>!self.props.locked && self.onSelect(el)}
-                       onLongPress={()=>self.onSelect(el)}
-                       activeOpacity={el.props.pressOpacity}>
-                         {selected == (el.props.name || el.key) ? React.cloneElement(el, {selected: true, style: [el.props.style, this.props.selectedStyle, el.props.selectedStyle]}) : el}
-                    </TouchableOpacity>
-                )}
+                {React.Children.map(this.props.children.filter(c=>c),(el) => {
+                    let CustomView = el.props.disabled ? View : TouchableOpacity;
+                    return (
+                        <CustomView key={el.props.name+"touch"}
+                           style={[styles.iconView, this.props.iconStyle, (el.props.name || el.key) == selected ? this.props.selectedIconStyle || el.props.selectedIconStyle || {} : {} ]}
+                           onPress={()=>!el.props.disabled && self.onSelect(el)}
+                           onLongPress={()=>self.onSelect(el)}
+                           activeOpacity={el.props.pressOpacity}>
+                             {selected == (el.props.name || el.key) ? React.cloneElement(el, {selected: true, style: [el.props.style, this.props.selectedStyle, el.props.selectedStyle]}) : el}
+                        </CustomView>
+                    )
+                })}
             </View>
         );
     }
